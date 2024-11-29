@@ -1,0 +1,53 @@
+id: myflow
+namespace: company.team
+
+tasks:
+  - id: fetch-sentiment-analysis
+    type: io.kestra.plugin.core.http.Request
+    uri: "<REDACTED>"
+    method: POST
+    body: |
+      {
+        "symbol": "{{ inputs.symbol | default('AAPL') }}"
+      }
+    headers:
+      Content-Type: "application/json"
+    logLevel: INFO
+
+  - id: send_alert
+    type: io.kestra.plugin.notifications.mail.MailExecution
+    to: "<REDACTED>"
+    from: "<REDACTED>"
+    subject: "Sentiment Analysis Results"
+    htmlTextContent: |
+      <p>Here are the sentiment analysis results for <strong>{{ inputs.symbol | default('AAPL') }}</strong>:</p>
+      <table border="1">
+        <tr>
+          <th>Link</th>
+          <th>Sentiment</th>
+          <th>Score</th>
+        </tr>
+        {% for sentiment in task(fetch-sentiment-analysis).body.sentiments %}
+        <tr>
+          <td><a href="{{ task(fetch-sentiment-analysis).body.links[loop.index0] }}">{{ task(fetch-sentiment-analysis).body.links[loop.index0] }}</a></td>
+          <td>{{ sentiment.label }}</td>
+          <td>{{ sentiment.score }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    host: "<REDACTED>"
+    username: "<REDACTED>"
+    password: "<REDACTED>"
+    executionId: "{{ execution.id }}"
+
+triggers:
+  - id: failed_workflow_execution
+    type: io.kestra.plugin.core.trigger.Flow
+    conditions:
+      - type: io.kestra.plugin.core.condition.ExecutionStatusCondition
+        in:
+          - FAILED
+          - WARNING
+      - type: io.kestra.plugin.core.condition.ExecutionNamespaceCondition
+        namespace: prod
+        prefix: true
