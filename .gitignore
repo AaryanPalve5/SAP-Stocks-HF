@@ -1,0 +1,3 @@
+venv/
+backend/chroma_stock/
+*.env

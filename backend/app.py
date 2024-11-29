@@ -3,12 +3,11 @@ import os
 from flask import Flask, request, jsonify
 import yfinance as yf
 from flask_cors import CORS
-from sentiment_analysis import SentimentAnalysis
+from sentiment_analysis import analyze_sentiment
 from newsapi import NewsApiClient  # Import News API Client
 import logging
 from bot import query_rag
 from chromadb import PersistentClient
-import time
 
 app = Flask(__name__)
 CORS(app)
@@ -140,7 +139,7 @@ def sentiment():
         if not all_parsed_results:
             return jsonify({"error": "No data found for sentiment analysis"}), 404
 
-        sentiment = SentimentAnalysis(all_parsed_results).sentiment_analysis()
+        sentiment = analyze_sentiment(all_parsed_results)
 
         return jsonify(
             {
