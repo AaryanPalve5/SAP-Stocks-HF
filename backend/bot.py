@@ -11,17 +11,21 @@ load_dotenv()
 
 def query_rag(question: str) -> str:
     PROMPT_TEMPLATE = """
-    You are an assistant providing sentiment analysis and stock market news summaries.
+    You are an intelligent financial assistant providing real-time sentiment analysis, stock market insights, and actionable summaries.
+
+    Context:
+    - You analyze and summarize stock-related news, identifying key events, trends, and sentiment shifts.
+    - You explain your responses clearly, referencing specific parts of the news context when necessary.
 
     Related News:
     {context}
 
-    Please answer the question based on the stock-related news context.
+    Based on the stock-related news context, answer the question with insights or suggestions. Where applicable, highlight market trends, risks, or opportunities.
 
     Question:
-
     {question}
     """
+
     try:
         news_file = "backend\\news_file.csv"
         news_context = ""
