@@ -19,6 +19,10 @@ This platform provides real-time sentiment analysis on stock-related news. It fe
   - Implements a RAG-based AI chatbot using Langchain and ChromaDB.
   - Utilizes the Gemini-1.5-Flash LLM as the base model for natural language querying of news articles.
 
+- **Kestra Workflow Automation:**  
+  - Kestra powers the platform’s backend automation, orchestrating real-time data fetching, sentiment analysis, and email notifications at scale.  
+  - It ensures seamless, automated processes for large-scale data handling, making SAP Stocks capable of processing vast amounts of stock-related news instantly.
+
 ## Technology Stack
 
 - **Selenium:** Used for web scraping to fetch real-time news data from various websites.
