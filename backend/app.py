@@ -8,7 +8,7 @@ from newsapi import NewsApiClient  # Import News API Client
 import logging
 from bot import query_rag
 from chromadb import PersistentClient
-
+##EXP
 app = Flask(__name__)
 CORS(app)
 
