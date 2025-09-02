@@ -1,0 +1,133 @@
+/* Global Styles for Dark Theme */
+:root {
+  font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: #e0e0e0;
+  background-color: #0a0f1a; /* Dark Blueish Black */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #0a0f1a;
+}
+
+h1, h2, h3, p {
+  color: #d1d9e6;
+  text-align: center;
+}
+
+/* Buttons */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #162032;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: #1e2a42;
+  border-color: #3498db;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto #3498db;
+}
+
+/* Stock Container */
+.stock-container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  width: 100%;
+  flex-wrap: nowrap;
+  padding: 20px;
+}
+
+/* Stock Card */
+.stock-card {
+  background-color: #131a26;
+  border: 1px solid #1f2a3b;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 250px;
+  flex: 0 0 auto;
+  padding: 16px;
+  transition: transform 0.3s;
+}
+
+.stock-card:hover {
+  transform: translateY(-5px);
+  border-color: #3498db;
+}
+
+/* Input Fields */
+input {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #1f2a3b;
+  background-color: #0f1726;
+  color: #e0e0e0;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 26, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #162032;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+}
+
+/* Transaction History */
+.transaction-history {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #131a26;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #1f2a3b;
+}
+
+/* Profit/Loss Colors */
+.text-green-500 {
+  color: #4caf50;
+}
+
+.text-red-500 {
+  color: #e74c3c;
+}
