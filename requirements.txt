@@ -1,6 +1,14 @@
 langchain
 langchain_chroma
 langchain_google_genai
+langchain-community
 python-dotenv
 bs4
 requests
+flask
+flask_cors
+transformers
+torch
+newsapi
+newsapi-python
+sentence-transformers

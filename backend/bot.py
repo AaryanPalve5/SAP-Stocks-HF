@@ -3,7 +3,7 @@ import logging
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import SentenceTransformerEmbeddings
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -35,9 +35,7 @@ def query_rag(question: str) -> str:
 
         db = Chroma(
             persist_directory="chroma_stock",
-            embedding_function=GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001"
-            ),
+            embedding_function=SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2"),
             collection_name="stock_news",
         )
 
@@ -51,7 +49,7 @@ def query_rag(question: str) -> str:
         prompt = prompt_template.format(context=context_text, question=question)
 
         model = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash", api_key=os.getenv("GOOGLE_API_KEY")
+            model="gemini-2.5-flash", api_key=os.getenv("GOOGLE_API_KEY")
         )
         response = model.invoke(prompt)
         if hasattr(response, "content"):

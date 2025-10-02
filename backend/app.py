@@ -8,6 +8,7 @@ from newsapi import NewsApiClient  # Import News API Client
 import logging
 from bot import query_rag
 from chromadb import PersistentClient
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -41,26 +42,33 @@ def stock():
     ticker = yf.Ticker(symbol)
 
     try:
-        quote = ticker.info
-        print(quote)
+        data = ticker.history(period="1d", interval="1m")
+        if data is None or data.empty:
+            data = ticker.history(period="5d", interval="1d")
+        if data is not None and not data.empty:
+            current_price = float(data["Close"].dropna().iloc[-1])
+            long_name = ticker.fast_info.get("shortName") if hasattr(ticker, "fast_info") else None
+            return jsonify({"symbol": symbol, "currentPrice": current_price, "longName": long_name or "N/A", "error": None}), 200
 
-        if "regularMarketOpen" in quote:
-            current_price = quote["regularMarketOpen"]
-            return jsonify(
-                {
-                    "symbol": symbol,
-                    "currentPrice": current_price,
-                    "longName": quote.get("longName", "N/A"),
-                    "error": None,
-                }
-            ), 200
-        else:
-            return jsonify(
-                {"error": "Stock not found or no current price available"}
-            ), 404
+        yahoo_url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
+        resp = requests.get(yahoo_url, timeout=10)
+        if resp.status_code == 429:
+            return jsonify({"error": "Rate limited by upstream provider"}), 429
+        if not resp.ok:
+            return jsonify({"error": f"Upstream error {resp.status_code}"}), resp.status_code
+        payload = resp.json()
+        results = payload.get("quoteResponse", {}).get("result", [])
+        if not results:
+            return jsonify({"error": "Stock not found or no current price available"}), 404
+        result = results[0]
+        current_price = result.get("regularMarketPrice") or result.get("regularMarketOpen")
+        long_name = result.get("longName") or result.get("shortName") or "N/A"
+        if current_price is None:
+            return jsonify({"error": "No current price available"}), 404
+        return jsonify({"symbol": symbol, "currentPrice": float(current_price), "longName": long_name, "error": None}), 200
     except Exception as e:
         print("Error fetching data:", e)
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 502
 
 
 def delete_chroma_collection():
